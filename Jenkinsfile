@@ -1,24 +1,56 @@
-// this will start an executor on a Jenkins agent with the docker label
 pipeline {
-  agent any
-  stages {
-    stage('build base image') {
-      steps {
-        sh 'make build-base'
-      }
+    agent any
+    stages {
+        stage('Build Base Image') {
+            steps {
+                sh 'make build-base'
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                sh 'make build-test'
+                sh 'make test-unit'
+            }
+        }
+        stage('Debugging') {
+            steps {
+                sh 'ls -l'
+            }
+        }
+        stage('Publish Test Results') {
+            steps {
+                junit '**/TEST-*.xml'
+            }
+        }
+        stage('Build Final Docker Image') {
+            steps {
+                sh 'make build'
+            }
+        }
+        stage('Deploy to EC2') {
+            steps {
+                // Install Docker on the EC2 instance
+                // Copy application files to the EC2 instance
+                // Build and run Docker container on the EC2 instance
+            }
+        }
     }
-    stage('run tests') {
-      steps {
-        sh 'make build-test'
-        sh 'make test-unit'
-        sh 'ls'
-        junit 'report/report.xml'
-      }
+    post {
+        always {
+            slackSend(
+                color: "#00FF00",
+                channel: "jenkins-notify",
+                message: "${currentBuild.fullDisplayName} succeeded",
+                tokenCredentialId: 'slack-token'
+            )
+        }
+        failure {
+            slackSend(
+                color: "#FF0000",
+                channel: "jenkins-notify",
+                message: "${currentBuild.fullDisplayName} was failed",
+                tokenCredentialId: 'slack-token'
+            )
+        }
     }
-    stage('build image') {
-      steps {
-        sh 'make build'
-      }
-    }
-  }
 }
