@@ -9,8 +9,9 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                sh 'go install github.com/jstemmer/go-junit-report/v2@latest'
-                sh 'go get -u github.com/jstemmer/go-junit-report'
+                // sh 'go install github.com/jstemmer/go-junit-report/v2@latest'
+                // sh 'go get -u github.com/jstemmer/go-junit-report'
+                sh 'export GO111MODULE=on && go install github.com/jstemmer/go-junit-report/v2@latest'
                 sh 'make build-test'
                 sh 'make test-unit'
             }
