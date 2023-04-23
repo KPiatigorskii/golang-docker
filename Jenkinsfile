@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        // GOPATH = "/path/to/gopath"
+        PATH = "$PATH:$GOPATH/bin"
+    }
     tools { go 'go' }
     stages {
         stage('Build Base Image') {
@@ -12,7 +16,7 @@ pipeline {
             steps {
                 // sh 'go install github.com/jstemmer/go-junit-report/v2@latest'
                 // sh 'go get -u github.com/jstemmer/go-junit-report'
-                sh 'export GO111MODULE=on && go install github.com/jstemmer/go-junit-report/v2@latest'
+                //sh 'export GO111MODULE=on && go install github.com/jstemmer/go-junit-report/v2@latest'
                 sh 'make build-test'
                 sh 'make test-unit'
             }
@@ -29,6 +33,7 @@ pipeline {
         }
         stage('Build Final Docker Image') {
             steps {
+                sh 'export GO111MODULE=on && go install github.com/jstemmer/go-junit-report/v2@latest'
                 sh 'make build'
             }
         }
