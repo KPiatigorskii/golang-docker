@@ -3,6 +3,7 @@ pipeline {
     stages {
         stage('Build Base Image') {
             steps {
+                sh 'whoami'
                 sh 'make build-base'
             }
         }
