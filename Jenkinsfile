@@ -29,6 +29,7 @@ pipeline {
         }
         stage('Deploy to EC2') {
             steps {
+                echo "HI"
                 // Install Docker on the EC2 instance
                 // Copy application files to the EC2 instance
                 // Build and run Docker container on the EC2 instance
