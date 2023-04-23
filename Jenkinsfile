@@ -3,7 +3,7 @@ pipeline {
     environment {
         // GOPATH = "/path/to/gopath"
         // PATH = "$PATH:$GOPATH/bin"
-        GO111MODULE=on
+        GO111MODULE = "on"
     }
     tools { go 'go' }
     stages {
