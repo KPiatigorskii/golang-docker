@@ -4,7 +4,9 @@ pipeline {
         // GOPATH = "/path/to/gopath"
         // PATH = "$PATH:$GOPATH/bin"
         GO111MODULE = "on"
+        PATH = "${PATH}:${tool 'go'}/bin"
     }
+
     tools { go 'go' }
     stages {
         stage('Build Base Image') {
